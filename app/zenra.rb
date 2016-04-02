@@ -3,6 +3,7 @@
 #----------------------------------------------------------------------
 
 require 'sinatra/base'
+require_relative 'models/manga'
 
 class Zenra < Sinatra::Base
 
@@ -19,8 +20,15 @@ class Zenra < Sinatra::Base
 	# get '/' - トップページへのアクセス
 	#---------------------------------------------------------------------
 	get '/' do
+    @thumbnails = Manga.thumbnails
 		erb :index
 	end
 
+  # get '/detail/:id' - 詳細ページ
+  #---------------------------------------------------------------------
+  get '/detail/:id' do
+    @page = Manga.page(params[:id] , 50)
+    erb :detail
+  end
 
 end
