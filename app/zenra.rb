@@ -27,8 +27,28 @@ class Zenra < Sinatra::Base
   # get '/detail/:id' - 詳細ページ
   #---------------------------------------------------------------------
   get '/detail/:id' do
-    @page = Manga.page(params[:id] , 50)
-    erb :detail
+    @id = params[:id]
+    @page_number = params[:page] || 0
+    @page_right = Manga.page(@id , @page_number.to_i)
+    @page_left = Manga.page(@id , @page_number.to_i + 1)
+    if @page_right && @page_left
+      erb :detail
+    else
+      pagenum = Manga.page_count(@id)
+      redirect "/detail/#{@id}?page=#{pagenum}"
+    end
+  end
+
+  # post '/detail/:id' - 作品情報の編集
+  #--------------------------------------------------------------------
+  post '/detail/:id' do
+    id = params[:id]
+    data = {
+      :origin => params[:origin],
+      :name => params[:name],
+      :author => params[:author]
+    }
+    Manga.write_data(id , data)
   end
 
 end
