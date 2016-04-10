@@ -28,7 +28,8 @@ class Zenra < Sinatra::Base
   #---------------------------------------------------------------------
   get '/detail/:id' do
     @id = params[:id]
-    @page_number = params[:page] || 0
+    @page_number = params[:page].to_i > 0 ? params[:page].to_i : 0
+    @page_count = Manga.page_count(@id)
     @page_right = Manga.page(@id , @page_number.to_i)
     @page_left = Manga.page(@id , @page_number.to_i + 1)
     if @page_right && @page_left
@@ -38,7 +39,7 @@ class Zenra < Sinatra::Base
       @author = data[:author] || ''
       erb :detail
     else
-      pagenum = Manga.page_count(@id)
+      pagenum = Manga.page_count(@id) - 2
       redirect "/detail/#{@id}?page=#{pagenum}"
     end
   end

@@ -52,7 +52,7 @@ class Manga
 
   # page_count - 対象作品のページ数を取得
   def self.page_count(id)
-    Dir.glob("#{DIR}/#{id}/*").size - 2
+    Dir.glob("#{DIR}/#{id}/*").size
   end
 
   # pagelist - 対象作品のページリストを取得

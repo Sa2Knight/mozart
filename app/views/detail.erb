@@ -31,6 +31,7 @@ $(function(){
   </div>
   <div class='col-sm-2' style="margin-left: -70px">
     <a href="/">トップへ</a>
+    <p><%= @page_number + 1 %> / <%= @page_count %></p>
     <form method="POST" action="/detail/<%= @id %>">
       <p>
         元ネタ <input type="text" name="origin" value="<%= @origin %>">
