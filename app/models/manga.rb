@@ -13,21 +13,27 @@ class Manga
     puts "----------"
   end
 
-  # read_data - データをしゅｔ句
+  # read_data - データを取得
   def self.read_data(key)
-    data = YAML.load_file(DARA)
-    data[key]
+    data = YAML.load_file(DB)
+    if data[key]
+      data[key]
+    else
+      Manga.write_data(key , {:origin => '' , :name => '' , :author => ''})
+      Manga.read_data(key)
+    end
   end
 
   # write_file - データを登録
   def self.write_data(key , val = nil)
-    data = YAML.load_file(file)
+    data = YAML.load_file(DB)
+    data or data = {}
     if val
       data[key] = val
     else
       data.delete(key)
     end
-    open(file , "w"){|f| f.write(YAML.dump(data))}
+    open(DB , "w"){|f| f.write(YAML.dump(data))}
   end
 
   # to_static - public以下のファイルパスをsinatraで参照できるパスに変換 

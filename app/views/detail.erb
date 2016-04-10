@@ -26,20 +26,20 @@ $(function(){
 
 <div class='row'>
   <div id="view" class='col-sm-10'>
-    <% if @page_left %><img id="main_view" src="<%= @page_left %>" height=800px width=auto><% end %>
-    <% if @page_right %><img id="main_view" src="<%= @page_right %>" height=800px width=auto><% end %>
+    <% if @page_left %><img id="main_view" src="<%= @page_left %>" height=800px width=auto onclick="view.next();"><% end %>
+    <% if @page_right %><img id="main_view" src="<%= @page_right %>" height=800px width=auto onclick="view.prev();"><% end %>
   </div>
   <div class='col-sm-2' style="margin-left: -70px">
     <a href="/">トップへ</a>
     <form method="POST" action="/detail/<%= @id %>">
       <p>
-        元ネタ <input type="text" name="origin">
+        元ネタ <input type="text" name="origin" value="<%= @origin %>">
       </p>
       <p>
-        作品名 <input type="text" name="name">
+        作品名 <input type="text" name="name" value="<%= @name %>">
       </p>
       <p>
-        作者名 <input type="text" name="author">
+        作者名 <input type="text" name="author" value="<%= @author %>">
       </p>
       <input type="submit" id="submit" value="更新">
     </form>
