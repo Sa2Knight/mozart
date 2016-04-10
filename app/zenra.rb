@@ -37,6 +37,7 @@ class Zenra < Sinatra::Base
       @origin = data[:origin] || ''
       @name = data[:name] || ''
       @author = data[:author] || ''
+      @good_count = data[:good] ? data[:good].length : 0
       erb :detail
     else
       pagenum = Manga.page_count(@id) - 2
@@ -48,14 +49,18 @@ class Zenra < Sinatra::Base
   #--------------------------------------------------------------------
   post '/detail/:id' do
     id = params[:id]
-    page = params[:page] || 0
-    data = {
-      :origin => params[:origin],
-      :name => params[:name],
-      :author => params[:author]
-    }
-    Manga.write_data(id , data)
-    redirect "/detail/#{id}?page=#{page}"
+    if params[:submit]
+      page = params[:page] || 0
+      data = {
+        :origin => params[:origin],
+        :name => params[:name],
+        :author => params[:author]
+      }
+      Manga.write_data(id , data)
+      redirect "/detail/#{id}?page=#{page}"
+    else
+      Manga.add_good(id)
+      redirect "/detail/#{id}"
+    end
   end
-
 end

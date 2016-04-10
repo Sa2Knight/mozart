@@ -1,6 +1,6 @@
 require 'pp'
 require 'yaml'
-
+require 'date'
 class Manga
  
   DIR = 'app/public/mozart'
@@ -19,7 +19,7 @@ class Manga
     if data[key]
       data[key]
     else
-      Manga.write_data(key , {:origin => '' , :name => '' , :author => ''})
+      Manga.write_data(key , {:origin => '' , :name => '' , :author => '' , :good => []})
       Manga.read_data(key)
     end
   end
@@ -65,6 +65,21 @@ class Manga
     pagelist = Manga.pagelist(id)
     number < pagelist.size or return
     pagelist[number]
+  end
+
+  # add - 大賞作品にいいね！(隠語)を追加する
+  def self.add_good(id)
+    data = Manga.read_data(id)
+    data.has_key?(:good) or data[:good] = []
+    good_history = data[:good]
+    today = Date.today.strftime("%Y-%m-%d")
+    if good_history.include?(today)
+      return false
+    else
+      good_history.push today
+      Manga.write_data(id , data)
+    end
+    return good_history.length
   end
 
 end
