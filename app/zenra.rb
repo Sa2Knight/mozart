@@ -49,7 +49,7 @@ class Zenra < Sinatra::Base
   #--------------------------------------------------------------------
   post '/detail/:id' do
     id = params[:id]
-    if params[:submit]
+    if params[:submit] == '更新'
       page = params[:page] || 0
       data = {
         :origin => params[:origin],
