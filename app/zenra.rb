@@ -32,6 +32,11 @@ class Zenra < Sinatra::Base
     @page_count = Manga.page_count(@id)
     @page_right = Manga.page(@id , @page_number.to_i)
     @page_left = Manga.page(@id , @page_number.to_i + 1)
+
+    if @page_number == 0
+      Manga.view_count(@id)
+    end
+
     if @page_right && @page_left
       data = Manga.read_data(@id)
       @origin = data[:origin] || ''

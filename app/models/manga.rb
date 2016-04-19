@@ -19,7 +19,14 @@ class Manga
     if data[key]
       data[key]
     else
-      Manga.write_data(key , {:origin => '' , :name => '' , :author => '' , :good => []})
+      Manga.write_data(key , {
+        :origin => '' ,
+        :name => '' ,
+        :author => '' ,
+        :lastview => '' ,
+        :viewcount => 0 ,
+        :good => []
+      })
       Manga.read_data(key)
     end
   end
@@ -47,6 +54,21 @@ class Manga
     Dir.glob("#{DIR}/*").map do |dir|
       path = Manga.to_static(Dir.glob("#{dir}/*").sort[0])
       {:id => path.split('/')[-2] , :url => path}
+    end
+  end
+
+  # view_count - 対象作品へのアクセス回数(１日１回)
+  def self.view_count(id)
+    info = Manga.read_data(id)
+    today = Date.today.strftime("%Y-%m-%d")
+    if info[:lastview] && info[:lastview] == today
+      return info[:viewcount]
+    else
+      info[:lastview] = today
+      info[:viewcount] or info[:viewcount] = 0 #いずれ不要に
+      info[:viewcount] += 1
+      Manga.write_data(id , info)
+      return info[:viewcount]
     end
   end
 
