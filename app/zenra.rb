@@ -3,6 +3,7 @@
 #----------------------------------------------------------------------
 
 require 'sinatra/base'
+require_relative 'models/util'
 require_relative 'models/manga'
 
 class Zenra < Sinatra::Base
@@ -20,32 +21,30 @@ class Zenra < Sinatra::Base
 	# get '/' - トップページへのアクセス
 	#---------------------------------------------------------------------
 	get '/' do
-    @thumbnails = Manga.thumbnails
+    @thumbnails = Util.thumbnails
 		erb :index
 	end
 
   # get '/detail/:id' - 詳細ページ
   #---------------------------------------------------------------------
   get '/detail/:id' do
+    manga = Manga.new(params[:id])
     @id = params[:id]
     @page_number = params[:page].to_i > 0 ? params[:page].to_i : 0
-    @page_count = Manga.page_count(@id)
-    @page_right = Manga.page(@id , @page_number.to_i)
-    @page_left = Manga.page(@id , @page_number.to_i + 1)
+    @page_count = manga.page_count
+    @page_right = manga.page(@page_number.to_i)
+    @page_left = manga.page(@page_number.to_i + 1)
 
-    if @page_number == 0
-      Manga.view_count(@id)
-    end
+    @page_number == 0 and manga.view_count
 
     if @page_right && @page_left
-      data = Manga.read_data(@id)
-      @origin = data[:origin] || ''
-      @name = data[:name] || ''
-      @author = data[:author] || ''
-      @good_count = data[:good] ? data[:good].length : 0
+      @origin = manga.origin
+      @name = manga.name
+      @author = manga.author
+      @good_count = manga.good_count
       erb :detail
     else
-      pagenum = Manga.page_count(@id) - 2
+      pagenum = manga.page_count - 2
       redirect "/detail/#{@id}?page=#{pagenum}"
     end
   end
@@ -54,17 +53,14 @@ class Zenra < Sinatra::Base
   #--------------------------------------------------------------------
   post '/detail/:id' do
     id = params[:id]
+    manga = Manga.new(id)
+    Util.debug(params[:submit])
     if params[:submit] == '更新'
+      manga.set_info(params[:origin] , params[:name] , params[:author])
       page = params[:page] || 0
-      data = {
-        :origin => params[:origin],
-        :name => params[:name],
-        :author => params[:author]
-      }
-      Manga.write_data(id , data)
       redirect "/detail/#{id}?page=#{page}"
-    else
-      Manga.add_good(id)
+    elsif params[:submit].match(/^いいね！/)
+      manga.add_good
       redirect "/detail/#{id}"
     end
   end
