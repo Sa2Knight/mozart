@@ -5,6 +5,7 @@
 require 'sinatra/base'
 require_relative 'models/util'
 require_relative 'models/manga'
+require_relative 'models/mangaManager'
 
 class Zenra < Sinatra::Base
 
@@ -21,7 +22,9 @@ class Zenra < Sinatra::Base
 	# get '/' - トップページへのアクセス
 	#---------------------------------------------------------------------
 	get '/' do
-    @thumbnails = Util.thumbnails
+    manga_list_hash = MangaManager.list
+    @manga_list = manga_list_hash.values
+    @database = Util.to_json(manga_list_hash)
 		erb :index
 	end
 
@@ -30,11 +33,10 @@ class Zenra < Sinatra::Base
   get '/detail/:id' do
     manga = Manga.new(params[:id])
     @id = params[:id]
-    @page_number = params[:page].to_i > 0 ? params[:page].to_i : 0
     @page_count = manga.page_count
+    @page_number = params[:page].to_i >= 0 ? params[:page].to_i : @page_count - 1
     @page_right = manga.page(@page_number.to_i)
     @page_left = manga.page(@page_number.to_i + 1)
-
     @page_number == 0 and manga.view_count
 
     if @page_right && @page_left

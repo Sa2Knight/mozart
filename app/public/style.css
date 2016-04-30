@@ -1,3 +1,42 @@
 body {
   overflow-x: hidden
 }
+
+.hidden {
+  display: none;
+}
+
+#content {
+  width : 100%;
+  height : 100%;
+}
+
+#left-column {
+  position: absolute;
+  width : 85%;
+}
+
+#right-column {
+  position: absolute;
+  width : 15%;
+  left : 85%;
+}
+
+#information-wrap {
+  position: fixed;
+  top: 5px;
+  width: 100%;
+  z-index: 999;
+}
+
+#information {
+  display: inline-block;
+  color: #fff;
+  background-color: rgba(0,0,0,0.7);
+  border-radius: 4px;
+  padding: 5px 9px;
+  border: none;
+  z-index: 999;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  font-size: 22px;
+}

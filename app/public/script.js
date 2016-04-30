@@ -1,25 +1,31 @@
-view = (function() {
-  var url;
-  var page;
-  var edit = false;
-  return {
-    init : function (_url , _page) {
-      url = _url;
-      page = _page;
+$(function() {
+
+  /*データ定義*/
+  var json = $('#database').text();
+  var manga = json != "" && JSON.parse(json);
+
+  /*インフォメーションバー*/
+  var information = {
+    show: function(mes) {
+     $('#information').text(mes);
+     $('#information-wrap').show();
     } ,
-    next : function () {
-      location.href = url + "?page=" + (page + 2);
-    } ,
-    prev : function () {
-      if (page > 0) {
-        location.href = url + "?page=" + (page - 2);
-      }
-    } ,
-    top : function () {
-      location.href = url;
-    } ,
-    last : function() {
-      location.href = url + "?page=" + (-1);
-    } ,
+    hide: function() {
+      $('#information-wrap').hide();
+    }
   };
-})();
+
+  /*イベント定義*/
+  $('.thumbnail').hover(
+    function() {  //in
+      var id = $(this).attr('id');
+      var origin = manga[id].origin;
+      var name = manga[id].name;
+      var mes = origin + ": " + name;
+      information.show(mes);
+    } ,
+    function() {  //out
+      information.hide();
+    }
+  );
+})

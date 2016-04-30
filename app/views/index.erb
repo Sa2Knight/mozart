@@ -1,6 +1,9 @@
-<h1>モーツァルト楽曲集</h1>
-<% @thumbnails.each do |t| %>
-  <a href="detail/<%= t[:id] %>">
-    <img src="<%= t[:url] %>" height=auto width=140px>
-  </a>
+<div class='hidden' id='information-wrap'>
+  <div id='information'>元ネタ名元ネタ名元ネタ名: 作品名作品名作品名作品名作品名作品名</div>
+</div>
+<% @manga_list.each do |manga| %>
+  <span class='thumbnail' id="<%= manga[:id] %>">
+    <a href="detail/<%= manga[:id] %>"><img class='image' src="<%= manga[:thumbnail] %>" height=auto width=140px></a>
+  </span>
 <% end %>
+<span id="database" class="hidden"><%= @database %></span>

@@ -1,6 +1,8 @@
 require 'pp'
 require 'yaml'
 require 'date'
+require 'json'
+
 class Util
 
   attr_reader :DIR , :DB
@@ -30,20 +32,18 @@ class Util
     @@DB
   end
 
+  # read_all - 全データを取得
+  def self.read_all
+    YAML.load_file(@@DB)
+  end
+
   # read_data - データを取得
   def self.read_data(key)
     data = YAML.load_file(@@DB)
     if data[key]
       data[key]
     else
-      Util.write_data(key , {
-        :origin => '' ,
-        :name => '' ,
-        :author => '' ,
-        :lastview => '' ,
-        :viewcount => 0 ,
-        :good => []
-      })
+      Util.write_data(key , Util.empty)
       Util.read_data(key)
     end
   end
@@ -66,12 +66,22 @@ class Util
     return $1
   end
 
-  # thubnails - 作品一覧を取得
-  def self.thumbnails
-    Dir.glob("#{@@DIR}/*").map do |dir|
-      path = Util.to_static(Dir.glob("#{dir}/*").sort[0])
-      {:id => path.split('/')[-2] , :url => path}
-    end
+  # to_json - RubyオブジェクトをJSONに変換する
+  #---------------------------------------------------------------------
+  def self.to_json(data)
+    data.kind_of?(Hash) or data.kind_of?(Array) or return ""
+    JSON.generate(data)
+  end
+
+  # 初期状態のハッシュを生成
+  def self.empty
+    {
+      :origin => '',
+      :name => '',
+      :author => '',
+      :lastview => '',
+      :good => []
+    }
   end
 
 end
