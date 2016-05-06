@@ -1,6 +1,15 @@
-<div class='hidden' id='information-wrap'>
-  <div id='information'>元ネタ名元ネタ名元ネタ名: 作品名作品名作品名作品名作品名作品名</div>
-</div>
+<div class='hidden' id='information-wrap'><div id='information'></div></div>
+
+<form method="GET" action="/" class="search">
+  <div>
+    <input type="radio" name="category" value="origin" checked> 元ネタ
+    <input type="radio" name="category" value="author"> 作者名
+    <input type="radio" name="category" value="name"> 作品名
+    <input type="text" name="search_word" class="textBox">
+    <input type="submit" value="検索" class="btn">
+  </div>
+</form>
+
 <% @manga_list.each do |manga| %>
   <span class='thumbnail' id="<%= manga[:id] %>">
     <a href="detail/<%= manga[:id] %>"><img class='image' src="<%= manga[:thumbnail] %>" height=auto width=140px></a>

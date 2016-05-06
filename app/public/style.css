@@ -24,8 +24,8 @@ body {
 
 #information-wrap {
   position: fixed;
-  top: 5px;
-  width: 100%;
+  bottom: 5px;
+  right: 0px;
   z-index: 999;
 }
 
