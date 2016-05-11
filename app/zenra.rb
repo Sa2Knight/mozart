@@ -22,8 +22,12 @@ class Zenra < Sinatra::Base
 	# get '/' - トップページへのアクセス
 	#---------------------------------------------------------------------
 	get '/' do
-    manga_list_hash = MangaManager.list
-    @manga_list = manga_list_hash.values
+    opt = {}
+    if params[:search_word]
+      opt[params[:category].to_sym] = params[:search_word]
+    end
+    manga_list_hash = MangaManager.list(opt)
+    @manga_list = manga_list_hash.values.sort_by {|item| item[:name]}
     @database = Util.to_json(manga_list_hash)
 		erb :index
 	end
