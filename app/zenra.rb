@@ -27,7 +27,7 @@ class Zenra < Sinatra::Base
       opt[params[:category].to_sym] = params[:search_word]
     end
     manga_list_hash = MangaManager.list(opt)
-    @manga_list = manga_list_hash.values.sort_by {|item| item[:name]}.shuffle
+    @manga_list = manga_list_hash.values.sort_by {|item| item[:name]}
     @database = Util.to_json(manga_list_hash)
 		erb :index
 	end
