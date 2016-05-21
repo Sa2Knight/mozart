@@ -27,7 +27,7 @@ class Zenra < Sinatra::Base
       opt[params[:category].to_sym] = params[:search_word]
     end
     manga_list_hash = MangaManager.list(opt)
-    @manga_list = manga_list_hash.values.sort_by {|item| item[:name]}
+    @manga_list = manga_list_hash.values.sort_by {|item| item[:name]}.shuffle
     @database = Util.to_json(manga_list_hash)
 		erb :index
 	end
@@ -60,7 +60,6 @@ class Zenra < Sinatra::Base
   post '/detail/:id' do
     id = params[:id]
     manga = Manga.new(id)
-    Util.debug(params[:submit])
     if params[:submit] == '更新'
       manga.set_info(params[:origin] , params[:name] , params[:author])
       page = params[:page] || 0
