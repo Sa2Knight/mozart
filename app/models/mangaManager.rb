@@ -18,7 +18,7 @@ class MangaManager
     # 元ネタ、作品名、作者名で絞込
     [:origin , :author , :name].each do |key|
       if opt[key]
-        data = data.select {|k , v| v[key] == opt[key]}
+        data = data.select {|k , v| v[key] =~ /#{opt[key]}/}
       end
     end
 
