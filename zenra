@@ -1,10 +1,10 @@
 #bin/bash
-APPDIR="/home/vagrant/Zenra"
+APPDIR="/home/vagrant/mozart"
 cd $APPDIR
 command="$1"
 
 if [ "$command" = "run" ]; then
-	bundle exec unicorn --port 8080
+	bundle exec unicorn -c unicorn.rb -D
 elif [ "$command" = "mysql" ]; then
 	mysql -u root --password=zenra zenra
 elif [ "$command" = "init_db" ]; then
